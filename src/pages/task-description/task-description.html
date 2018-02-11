@@ -1,0 +1,32 @@
+<!--
+  Generated template for the TaskDescriptionPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">{{"BACK" | translate }}</button>
+    </ion-buttons>
+    <ion-title>{{ "DESCRIPTION" | translate }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-card class="full-height">
+    <img [src]="this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,'+description.image)" />
+    <ion-card-content>
+      <ion-card-title>
+        {{description.title}}
+      </ion-card-title>
+      <p>
+        {{description.description}}
+      </p>
+      <button ion-button block>Εκκίνηση</button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

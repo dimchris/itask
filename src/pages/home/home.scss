@@ -1,3 +1,9 @@
 page-home {
-
+    .ellipsis {
+        // width: 12em;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+      }
 }
