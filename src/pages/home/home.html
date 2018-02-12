@@ -11,6 +11,8 @@
         <img [src]="this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,'+item.image)" />
         <ion-card-content>
           <ion-card-title>
+              <ion-icon *ngIf="item.like" name="heart" (click)="item.like=!item.like; $event.stopPropagation();"></ion-icon>
+              <ion-icon *ngIf="!item.like" name="heart-outline" (click)="item.like=!item.like; $event.stopPropagation();"></ion-icon>
             {{item.title}}
           </ion-card-title>
           <p text-wrap class="ellipsis">

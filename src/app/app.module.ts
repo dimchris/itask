@@ -2,6 +2,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
+import { IonicStorageModule } from '@ionic/storage';
 
 import { AboutPage } from '../pages/about/about';
 import { SettingsPage } from '../pages/settings/settings';
@@ -18,6 +19,9 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ItemsProvider } from '../mocks/providers/items/items';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { TaskDescriptionPage } from '../pages/task-description/task-description';
+import { OrderByPipe } from '../pipes/order-by/order-by';
+import { UserPreferencesProvider } from '../providers/user-preferences/user-preferences';
+import { FavoritesPage } from '../pages/favorites/favorites';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -31,7 +35,9 @@ export function createTranslateLoader(http: HttpClient) {
     HomePage,
     SearchPage,
     TabsPage,
-    TaskDescriptionPage
+    TaskDescriptionPage,
+    OrderByPipe,
+    FavoritesPage
   ],
   imports: [
     BrowserModule,
@@ -43,7 +49,8 @@ export function createTranslateLoader(http: HttpClient) {
         useFactory: (createTranslateLoader),
         deps: [HttpClient]
       }
-    })
+    }),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -53,14 +60,16 @@ export function createTranslateLoader(http: HttpClient) {
     HomePage,
     SearchPage,
     TabsPage,
-    TaskDescriptionPage
+    TaskDescriptionPage,
+    FavoritesPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ItemsProvider,
-    ScreenOrientation
+    ScreenOrientation,
+    UserPreferencesProvider
   ]
 })
 export class AppModule {}

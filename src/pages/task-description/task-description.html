@@ -21,12 +21,20 @@
     <img [src]="this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,'+description.image)" />
     <ion-card-content>
       <ion-card-title>
+        <ion-icon *ngIf="description.like" name="heart" (click)="removeFromFavorite(description)"></ion-icon>
+        <ion-icon *ngIf="!description.like" name="heart-outline" (click)="addToFavorite(description)"></ion-icon>
         {{description.title}}
       </ion-card-title>
       <p>
         {{description.description}}
       </p>
-      <button ion-button block>Εκκίνηση</button>
+      <ion-label>
+        {{ "LEVEL" | translate }} : {{ description.level }}/5
+      </ion-label>
+      <ion-label>
+        {{ "AGE" | translate}} : {{ description.age }}
+      </ion-label>
+      <button ion-button block>{{ "START" | translate }}</button>
     </ion-card-content>
   </ion-card>
 </ion-content>
