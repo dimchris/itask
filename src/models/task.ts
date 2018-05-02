@@ -1,6 +1,14 @@
+import { Card } from "./Card";
+
 export class Task {
-    title: any;
-    constructor(title) {
-        this.title = title;
-    }
+    constructor(
+        private _id: string, 
+        private name: string,
+        private description: string,
+        private age: number,
+        private level: number,
+        private image: {id: string, data:string},
+        private cards: Card[],
+        private contributor: {id: string, name: string},
+    ){}
 }

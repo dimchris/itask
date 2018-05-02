@@ -18,21 +18,21 @@
 
 <ion-content>
   <ion-card class="full-height">
-    <img [src]="this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,'+description.image)" />
+    <img [src]="this.sanitizer.bypassSecurityTrustUrl(task.image.data)" />
     <ion-card-content>
-      <ion-card-title>
-        <ion-icon *ngIf="description.like" name="heart" (click)="removeFromFavorite(description)"></ion-icon>
-        <ion-icon *ngIf="!description.like" name="heart-outline" (click)="addToFavorite(description)"></ion-icon>
-        {{description.title}}
+      <ion-card-title  text-center>
+        {{task.name}}
+        <ion-icon  *ngIf="fav" name="heart" (click)="removeFromFavorite(task)"></ion-icon>
+        <ion-icon *ngIf="!fav" name="heart-outline" (click)="addToFavorite(task)"></ion-icon>
       </ion-card-title>
       <p>
-        {{description.description}}
+        {{task.descriprion}}
       </p>
       <ion-label>
-        {{ "LEVEL" | translate }} : {{ description.level }}/5
+        {{ "LEVEL" | translate }} : {{ task.level }}/5
       </ion-label>
       <ion-label>
-        {{ "AGE" | translate}} : {{ description.age }}
+        {{ "AGE" | translate}} : {{ task.age }}
       </ion-label>
       <button ion-button block>{{ "START" | translate }}</button>
     </ion-card-content>

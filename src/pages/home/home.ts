@@ -1,25 +1,51 @@
+import { TaskListItem } from './../../app/interfaces/TaskListItem';
+import { TasksProvider } from './../../providers/tasks/tasks';
 import { Component } from '@angular/core';
-import { NavController, ModalController } from 'ionic-angular';
-import { ItemsProvider } from '../../mocks/providers/items/items';
-import { ListItem } from '../../models/list-item';
+import { NavController, ModalController, LoadingController, ToastController } from 'ionic-angular';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TaskDescriptionPage } from '../task-description/task-description';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-  items: ListItem[] = []
-  constructor(itemsProvider: ItemsProvider, public navCtrl: NavController, public sanitizer:DomSanitizer, public modalCtrl: ModalController) {
-    this.items = itemsProvider.query();
-  }
+  tasks: TaskListItem[];
+  constructor(
+    public navCtrl: NavController,
+    public sanitizer: DomSanitizer,
+    public modalCtrl: ModalController,
+    private tasksCtrl: TasksProvider,
+    private loadCtrl: LoadingController,
+    private toastCtrl: ToastController
+  ) { }
 
-  describe(item){
-    // this.navCtrl.push(TaskDescriptionPage,{
-    //   item: item
-    // });
-    let description = this.modalCtrl.create(TaskDescriptionPage, {item:item});
+  ionViewDidLoad(){
+    let loading = this.loadCtrl.create({ content: 'Loading games...' })
+    loading.present();
+    this.tasksCtrl.getTaskList().then(
+      data => {
+        this.tasks = data.tasks
+        console.log(this.tasks);
+        loading.dismiss()
+      }
+    )
+    .catch(
+      error => {
+        // TODO : translate
+        loading.dismiss()
+        this.toastCtrl.create({message:'Could not load tasks..', duration:2000})
+        .present()
+      }
+    )
+  }
+  onTaskTap(item) {
+    console.log('tapped');
+    
+    let description = this.modalCtrl.create(TaskDescriptionPage, { item: item });
     description.present();
   }
+
+
 }

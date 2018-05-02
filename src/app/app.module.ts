@@ -16,12 +16,12 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ItemsProvider } from '../mocks/providers/items/items';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { TaskDescriptionPage } from '../pages/task-description/task-description';
 import { OrderByPipe } from '../pipes/order-by/order-by';
 import { UserPreferencesProvider } from '../providers/user-preferences/user-preferences';
 import { FavoritesPage } from '../pages/favorites/favorites';
+import { TasksProvider } from '../providers/tasks/tasks';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -67,9 +67,9 @@ export function createTranslateLoader(http: HttpClient) {
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ItemsProvider,
     ScreenOrientation,
-    UserPreferencesProvider
+    UserPreferencesProvider,
+    TasksProvider
   ]
 })
 export class AppModule {}

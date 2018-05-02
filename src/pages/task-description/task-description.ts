@@ -1,8 +1,12 @@
+import { TasksProvider } from './../../providers/tasks/tasks';
+import { TaskListItem } from './../../app/interfaces/TaskListItem';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, ToastController } from 'ionic-angular';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { UserPreferencesProvider } from '../../providers/user-preferences/user-preferences';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/fromPromise';
 
 /**
  * Generated class for the TaskDescriptionPage page.
@@ -17,7 +21,8 @@ import { UserPreferencesProvider } from '../../providers/user-preferences/user-p
   templateUrl: 'task-description.html',
 })
 export class TaskDescriptionPage {
-  description: any;
+  task: TaskListItem;
+  fav: boolean = false;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -25,9 +30,14 @@ export class TaskDescriptionPage {
     public sanitizer: DomSanitizer,
     public toastCtrl: ToastController,
     public translateService: TranslateService,
-    public userPreferences: UserPreferencesProvider  
+    public tasksCtrl: TasksProvider
   ) {
-    this.description = navParams.get('item');
+    this.task = navParams.get('item');
+    tasksCtrl.isFavorite(this.task._id).then(
+      fav => {
+        this.fav = fav
+      }
+    );
   }
 
   ionViewDidLoad() {
@@ -41,9 +51,13 @@ export class TaskDescriptionPage {
         msg = value;
       }
     );
-    item.likeToggle();
-    this.userPreferences.add(item);
-    this.presentToast(msg);
+    this.tasksCtrl.addToFavorites(this.task).then(_ => {
+      this.fav =true
+      this.toastCtrl.create({ message: msg, duration: 2000 })
+        .present()
+    }).catch(error => {
+      console.log(error);
+    })
   }
 
   removeFromFavorite(item) {
@@ -54,18 +68,21 @@ export class TaskDescriptionPage {
         msg = value;
       }
     );
-    item.likeToggle();
-    this.presentToast(msg);
+    this.tasksCtrl.removeFromFavorites(this.task._id).then(_ => {
+      this.fav = false;
+      this.toastCtrl.create({ message: msg, duration: 2000 })
+        .present()
+    }).catch(error => {
+      console.log(error);
+    })
+  }
+
+  isfavored(task: TaskListItem) {
+    return this.tasksCtrl.isFavorite(task._id)
   }
 
   dismiss() {
     this.viewCtrl.dismiss();
   }
-  presentToast(msg: string) {
-    let toast = this.toastCtrl.create({
-      message: msg,
-      duration: 3000
-    });
-    toast.present();
-  }
+
 }
