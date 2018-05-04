@@ -14,14 +14,14 @@ export class TasksProvider {
   ) { }
 
   getTaskList() {
+    console.log('fetching task list');
     let Url = AppSettings.API_ENDPOINT
     return this.http.get<{ count: number, tasks: TaskListItem[] }>(Url + 'tasks/')
       .toPromise()
       .then(
         data => {
           return data.tasks.map(task => {
-            // console.log(task);
-            
+            console.log(task);
             return {
               _id: task._id,
               name: task.name,
@@ -29,7 +29,9 @@ export class TasksProvider {
               image: task.image,
               level: task.level,
               age: task.age,
-              contributor: task.contributor
+              contributor: task.contributor,
+              updatedAt: task.updatedAt,
+              createdAt: task.createdAt
             }
           }
           )
@@ -86,22 +88,28 @@ export class TasksProvider {
       )
   }
 
-  isSaved(taskId) {
+  isSaved(task: TaskListItem) {
     return this.storage.get('tasks')
       .then(
         tasks => {
           let idx = -1;
+          //is up to date
+          let valid = true;
           if (tasks) {
-            idx = tasks.findIndex(item => { return item._id === taskId })
+            idx = tasks.findIndex(item => { return item._id === task._id })
+            if(idx>0){
+              console.log(task.updatedAt);
+              valid = tasks[idx].updatedAt === task.updatedAt
+            }
           }
-          return tasks && idx !== -1;
+          return tasks && idx !== -1 && valid;
         }
       )
 
   }
 
-  getTask(taskId: string) {
-    return this.isSaved(taskId).then(saved => {
+  getTask(task: TaskListItem) {
+    return this.isSaved(task).then(saved => {
       console.log(saved);
       
       if (saved) {
@@ -110,14 +118,14 @@ export class TasksProvider {
             console.log('this task is on storage');
             console.log(data);
             
-            let idx = data.findIndex(item => { return item._id === taskId })
+            let idx = data.findIndex(item => { return item._id === task._id })
             return data[idx]
           }
         )
       } else {
         console.log('fetching task');
         let Url = AppSettings.API_ENDPOINT
-        return this.http.get<Task>(Url + 'tasks/' + taskId).toPromise()
+        return this.http.get<Task>(Url + 'tasks/' + task._id).toPromise()
           .then(task => { 
             return this.saveTask(task) 
           })

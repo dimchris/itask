@@ -10,5 +10,7 @@ export class Task {
         private image: {id: string, data:string},
         private cards: Card[],
         private contributor: {id: string, name: string},
+        private createdAt: string,
+        private updatedAt: string
     ){}
 }

@@ -5,5 +5,7 @@ export interface TaskListItem{
     image: {id:string, data: string},
     level: number,
     age: number,
-    contributor: string
+    contributor: string,
+    createdAt:string,
+    updatedAt: string
 }

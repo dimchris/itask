@@ -87,10 +87,10 @@ export class TaskDescriptionPage {
     this.viewCtrl.dismiss();
   }
 
-  onStart(taskId: string){
-    console.log(taskId);
+  onStart(task: TaskListItem){
+    console.log(task);
     
-    this.tasksCtrl.getTask(taskId)
+    this.tasksCtrl.getTask(task)
       .then( task => {
         console.log(task);
       })
