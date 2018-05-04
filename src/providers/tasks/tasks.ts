@@ -37,11 +37,14 @@ export class TasksProvider {
           )
         }
       )
-      .catch(
-        error => {
-          return this.storage.get('task-list')
-        }
-      )
+  }
+
+  saveTasklist(taskListItems: TaskListItem[]){
+    return this.storage.set('task-list', taskListItems)
+  }
+
+  getTaskListFromStorage(){
+    return this.storage.get('task-list')
   }
 
   getFavorites() {
@@ -92,14 +95,22 @@ export class TasksProvider {
     return this.storage.get('tasks')
       .then(
         tasks => {
+          console.log(tasks);
+          
           let idx = -1;
           //is up to date
           let valid = true;
           if (tasks) {
             idx = tasks.findIndex(item => { return item._id === task._id })
             if(idx>0){
-              console.log(task.updatedAt);
+              
               valid = tasks[idx].updatedAt === task.updatedAt
+              console.log(tasks[idx]);
+              console.log(task.updatedAt)
+              console.log(valid);
+              if(!valid){
+                this.removeTask(task._id)
+              }
             }
           }
           return tasks && idx !== -1 && valid;
@@ -109,9 +120,9 @@ export class TasksProvider {
   }
 
   getTask(task: TaskListItem) {
+    // console.log('getting task: ',task);
+    
     return this.isSaved(task).then(saved => {
-      console.log(saved);
-      
       if (saved) {
         return this.storage.get('tasks').then(
           data => {
@@ -125,8 +136,10 @@ export class TasksProvider {
       } else {
         console.log('fetching task');
         let Url = AppSettings.API_ENDPOINT
+        // console.log(task);
+        
         return this.http.get<Task>(Url + 'tasks/' + task._id).toPromise()
-          .then(task => { 
+          .then(task => {             
             return this.saveTask(task) 
           })
       }

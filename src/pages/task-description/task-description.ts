@@ -1,3 +1,4 @@
+import { TaskPage } from './../task/task';
 import { TasksProvider } from './../../providers/tasks/tasks';
 import { TaskListItem } from './../../app/interfaces/TaskListItem';
 import { Component } from '@angular/core';
@@ -33,7 +34,7 @@ export class TaskDescriptionPage {
     public tasksCtrl: TasksProvider
   ) {
     this.task = navParams.get('item');
-    console.log(this.task);
+    // console.log(this.task);
     
     tasksCtrl.isFavorite(this.task._id).then(
       fav => {     
@@ -88,11 +89,13 @@ export class TaskDescriptionPage {
   }
 
   onStart(task: TaskListItem){
-    console.log(task);
-    
+ 
     this.tasksCtrl.getTask(task)
-      .then( task => {
-        console.log(task);
+      .then( data => {
+        console.log(data);
+        this.navCtrl.push(TaskPage, {task: data})
+      }).catch( error => {
+        this.toastCtrl.create({message:'Δεν βρέθηκε σύνδεση στο διαδύκτιο.'})
       })
   }
 }

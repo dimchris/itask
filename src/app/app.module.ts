@@ -1,3 +1,5 @@
+import { TaskPage } from './../pages/task/task';
+import { Task } from './../models/Task';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
@@ -37,7 +39,8 @@ export function createTranslateLoader(http: HttpClient) {
     TabsPage,
     TaskDescriptionPage,
     OrderByPipe,
-    FavoritesPage
+    FavoritesPage,
+    TaskPage
   ],
   imports: [
     BrowserModule,
@@ -61,7 +64,8 @@ export function createTranslateLoader(http: HttpClient) {
     SearchPage,
     TabsPage,
     TaskDescriptionPage,
-    FavoritesPage
+    FavoritesPage,
+    TaskPage
   ],
   providers: [
     StatusBar,
@@ -69,7 +73,7 @@ export function createTranslateLoader(http: HttpClient) {
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ScreenOrientation,
     UserPreferencesProvider,
-    TasksProvider
+    TasksProvider,
   ]
 })
 export class AppModule {}
