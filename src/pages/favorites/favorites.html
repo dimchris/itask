@@ -1,18 +1,25 @@
-<!--
-  Generated template for the FavoritesPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-
+<!-- <ion-header>
   <ion-navbar>
-    <ion-title>favorites</ion-title>
+    <ion-title>{{ "HOME_TAB_TITLE" | translate }}</ion-title>
   </ion-navbar>
-
-</ion-header>
-
+</ion-header> -->
 
 <ion-content padding>
-
+  <ion-row class="row">
+    <ion-col col-12 col-md-6 col-lg-4 col-xl-3 *ngFor="let task of tasks">
+      <ion-card (tap)="onTaskTap(task)">
+        <img [src]="this.sanitizer.bypassSecurityTrustUrl(task.image.data)" />
+        <ion-card-content>
+          <ion-card-title>
+              <!-- <ion-icon *ngIf="item.like" name="heart" (click)="item.like=!item.like; $event.stopPropagation();"></ion-icon> -->
+              <!-- <ion-icon *ngIf="!item.like" name="heart-outline" (click)="item.like=!item.like; $event.stopPropagation();"></ion-icon> -->
+            {{ task.name }}
+          </ion-card-title>
+          <p text-wrap class="ellipsis">
+            {{ task.description }}
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
 </ion-content>

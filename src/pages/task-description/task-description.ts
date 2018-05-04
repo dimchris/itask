@@ -33,8 +33,10 @@ export class TaskDescriptionPage {
     public tasksCtrl: TasksProvider
   ) {
     this.task = navParams.get('item');
+    console.log(this.task);
+    
     tasksCtrl.isFavorite(this.task._id).then(
-      fav => {
+      fav => {     
         this.fav = fav
       }
     );
@@ -52,7 +54,7 @@ export class TaskDescriptionPage {
       }
     );
     this.tasksCtrl.addToFavorites(this.task).then(_ => {
-      this.fav =true
+      this.fav = true
       this.toastCtrl.create({ message: msg, duration: 2000 })
         .present()
     }).catch(error => {
@@ -85,4 +87,12 @@ export class TaskDescriptionPage {
     this.viewCtrl.dismiss();
   }
 
+  onStart(taskId: string){
+    console.log(taskId);
+    
+    this.tasksCtrl.getTask(taskId)
+      .then( task => {
+        console.log(task);
+      })
+  }
 }

@@ -26,7 +26,7 @@
         <ion-icon *ngIf="!fav" name="heart-outline" (click)="addToFavorite(task)"></ion-icon>
       </ion-card-title>
       <p>
-        {{task.descriprion}}
+        {{task.description}}
       </p>
       <ion-label>
         {{ "LEVEL" | translate }} : {{ task.level }}/5
@@ -34,7 +34,7 @@
       <ion-label>
         {{ "AGE" | translate}} : {{ task.age }}
       </ion-label>
-      <button ion-button block>{{ "START" | translate }}</button>
+      <button ion-button block (tap)="onStart(task._id)">{{ "START" | translate }}</button>
     </ion-card-content>
   </ion-card>
 </ion-content>

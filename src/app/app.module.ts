@@ -41,7 +41,7 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {tabsHideOnSubPages:true}),
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {

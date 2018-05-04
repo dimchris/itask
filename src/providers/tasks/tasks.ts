@@ -19,7 +19,20 @@ export class TasksProvider {
       .toPromise()
       .then(
         data => {
-          return data;
+          return data.tasks.map(task => {
+            // console.log(task);
+            
+            return {
+              _id: task._id,
+              name: task.name,
+              description: task.description,
+              image: task.image,
+              level: task.level,
+              age: task.age,
+              contributor: task.contributor
+            }
+          }
+          )
         }
       )
       .catch(
@@ -40,6 +53,8 @@ export class TasksProvider {
           if (tasks) {
             tasks.push(taskListItem)
             return this.storage.set('favTasks', tasks)
+          } else {
+            return this.storage.set('favTasks', [taskListItem])
           }
         }
       )
@@ -51,7 +66,7 @@ export class TasksProvider {
         tasks => {
           if (tasks) {
             let idx = tasks.findIndex(item => { return item._id === taskId })
-            tasks.splice(idx, 0)
+            tasks.splice(idx, 1)
           }
           return this.storage.set('favTasks', tasks)
         }
@@ -59,54 +74,65 @@ export class TasksProvider {
   }
 
   isFavorite(taskId: string) {
-    console.log("is fav");
-    
     return this.storage.get('favTasks')
       .then(
         tasks => {
           let idx = -1;
           if (tasks) {
             idx = tasks.findIndex(item => { return item._id === taskId })
-          }          
+          }
           return tasks && idx !== -1;
         }
       )
   }
 
-  isSaved(taskId){
-      return this.storage.get('tasks')
-        .then(
-          tasks => {
-            let idx = -1;
-            if (tasks) {
-              idx = tasks.findIndex(item => { return item._id === taskId })
-            }
-            return tasks && idx !== -1;
+  isSaved(taskId) {
+    return this.storage.get('tasks')
+      .then(
+        tasks => {
+          let idx = -1;
+          if (tasks) {
+            idx = tasks.findIndex(item => { return item._id === taskId })
           }
-        )
-    
+          return tasks && idx !== -1;
+        }
+      )
+
   }
 
   getTask(taskId: string) {
-    if (this.isSaved(taskId)) {
-      console.log('this task is on storage');
-      this.storage.get('tasks').then(
-        data => {
-          let idx = data.findIndex(item => { return item._id === taskId })
-          return data[idx]
-        }
-      )
-    } else {
-      console.log('fetching task');
-      let Url = AppSettings.API_ENDPOINT
-      return this.http.get<Task>(Url + 'tasks/' + taskId).toPromise()
-        .then(task => {return this.saveTask(task)})
+    return this.isSaved(taskId).then(saved => {
+      console.log(saved);
+      
+      if (saved) {
+        return this.storage.get('tasks').then(
+          data => {
+            console.log('this task is on storage');
+            console.log(data);
+            
+            let idx = data.findIndex(item => { return item._id === taskId })
+            return data[idx]
+          }
+        )
+      } else {
+        console.log('fetching task');
+        let Url = AppSettings.API_ENDPOINT
+        return this.http.get<Task>(Url + 'tasks/' + taskId).toPromise()
+          .then(task => { 
+            return this.saveTask(task) 
+          })
+      }
     }
+    )
   }
 
   saveTask(task: Task) {
-    this.storage.get('tasks').then(tasks => {
-      return this.storage.set('tasks', [...tasks, task]).then( _ =>{return task})
+    return this.storage.get('tasks').then(tasks => {
+      if(tasks){
+        return this.storage.set('tasks', [...tasks, task]).then(_ => { return task })
+      }else{
+        return this.storage.set('tasks', [task]).then(_ => { return task })
+      }
     })
   }
 

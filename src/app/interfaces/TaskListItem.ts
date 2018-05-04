@@ -6,5 +6,4 @@ export interface TaskListItem{
     level: number,
     age: number,
     contributor: string
-    like: boolean
 }
