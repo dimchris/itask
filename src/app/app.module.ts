@@ -1,3 +1,4 @@
+import { TaskListItemComponent } from './../components/task-list-item/task-list-item';
 import { TaskPage } from './../pages/task/task';
 import { Task } from './../models/Task';
 import { NgModule, ErrorHandler } from '@angular/core';
@@ -40,7 +41,8 @@ export function createTranslateLoader(http: HttpClient) {
     TaskDescriptionPage,
     OrderByPipe,
     FavoritesPage,
-    TaskPage
+    TaskPage,
+    TaskListItemComponent
   ],
   imports: [
     BrowserModule,

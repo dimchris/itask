@@ -3,7 +3,6 @@ import { TaskListItem } from './../../app/interfaces/TaskListItem';
 import { TasksProvider } from './../../providers/tasks/tasks';
 import { Component } from '@angular/core';
 import { NavController, ModalController, LoadingController, ToastController } from 'ionic-angular';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -14,7 +13,6 @@ export class HomePage {
   tasks: TaskListItem[];
   constructor(
     public navCtrl: NavController,
-    public sanitizer: DomSanitizer,
     public modalCtrl: ModalController,
     private tasksCtrl: TasksProvider,
     private loadCtrl: LoadingController,
@@ -44,12 +42,4 @@ export class HomePage {
       }
     )
   }
-  onTaskTap(item) {
-    console.log('tapped');
-    // this.navCtrl.push(TaskDescriptionPage, {item})
-    let description = this.modalCtrl.create(TaskDescriptionPage, { item: item },{cssClass:'my-modal'});
-    description.present();
-  }
-
-
 }

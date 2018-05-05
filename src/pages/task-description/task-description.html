@@ -18,7 +18,7 @@
 
 <ion-content>
   <ion-card class="full-height">
-    <img [src]="this.sanitizer.bypassSecurityTrustUrl(task.image.data)" />
+    <img [src]="this.sanitizer.bypassSecurityTrustUrl(task.image.data)" [alt]="task.image.description"/>
     <ion-card-content>
       <ion-card-title  text-center>
         {{task.name}}

@@ -5,21 +5,12 @@
 </ion-header> -->
 
 <ion-content padding>
+  <ion-row>
+    <ion-col center text-center *ngIf="!tasks">Τα αγαπημένα σας παιχνίδια θα εμφανίζονται εδώ.</ion-col>
+  </ion-row>
   <ion-row class="row">
     <ion-col col-12 col-md-6 col-lg-4 col-xl-3 *ngFor="let task of tasks">
-      <ion-card (tap)="onTaskTap(task)">
-        <img [src]="this.sanitizer.bypassSecurityTrustUrl(task.image.data)" />
-        <ion-card-content>
-          <ion-card-title>
-              <!-- <ion-icon *ngIf="item.like" name="heart" (click)="item.like=!item.like; $event.stopPropagation();"></ion-icon> -->
-              <!-- <ion-icon *ngIf="!item.like" name="heart-outline" (click)="item.like=!item.like; $event.stopPropagation();"></ion-icon> -->
-            {{ task.name }}
-          </ion-card-title>
-          <p text-wrap class="ellipsis">
-            {{ task.description }}
-          </p>
-        </ion-card-content>
-      </ion-card>
+      <task-list-item [task]="task" (onModalDismissed)="updateFavorites($event)"></task-list-item>
     </ion-col>
   </ion-row>
 </ion-content>

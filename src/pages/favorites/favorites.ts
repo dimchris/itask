@@ -22,6 +22,12 @@ export class FavoritesPage {
   ) { }
 
   ionViewDidEnter(){
+    this.updateFavorites(null)
+  }
+
+  updateFavorites(event:any){
+    if(event) console.log(event);
+    
     this.tasksCtrl.getFavorites().then(
       data => {
         this.tasks = data
@@ -35,23 +41,4 @@ export class FavoritesPage {
       }
     )
   }
-  onTaskTap(item) {
-    console.log('tapped');
-    
-    let description = this.modalCtrl.create(TaskDescriptionPage, { item: item });
-    description
-      .present();
-    description.onDidDismiss( _ => {
-      this.tasksCtrl.getFavorites().then(
-        data => {
-          console.log(data);
-          
-          this.tasks = data
-          console.log(this.tasks);
-        }
-    )
-  })
-}
-
-
 }
