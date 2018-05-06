@@ -42,4 +42,31 @@ export class HomePage {
       }
     )
   }
+
+  doRefresh(event: any){
+    console.log(event);
+    let loading = this.loadCtrl.create({ content: 'Ανανέωση Λίστας Παιχνιδιών...' })
+    loading.present();
+    this.tasksCtrl.getTaskList().then(
+      data => {
+        this.tasks = data
+        console.log(this.tasks);
+        loading.dismiss()
+        this.tasksCtrl.saveTasklist(data)
+      }
+    )
+    .catch(
+      error => {
+        console.log(error);
+        loading.dismiss()
+        this.toastCtrl.create({message:'Δεν είναι δυνατή η ανανέωση της λίστας. Δε βρέθηκε σύνδεση στο διαδίκτυο.', duration:4000})
+        .present()
+        this.tasksCtrl.getTaskListFromStorage().then( data => {
+          this.tasks = data ;
+        })
+      }
+    )
+    event.complete()
+  }
+
 }
