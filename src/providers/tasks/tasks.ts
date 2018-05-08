@@ -13,11 +13,28 @@ export class TasksProvider {
     private storage: Storage
   ) { }
 
-  getTaskList() {
+  getTaskList(query = null) {
     console.log('fetching task list');
     let Url = AppSettings.API_ENDPOINT
-    return this.http.get<{ count: number, tasks: TaskListItem[] }>(Url + 'tasks/')
+    let tasks: Promise<{ count: number, tasks: TaskListItem[] }>
+    console.log(query);
+    
+    if (!query) {
+      tasks = this.http.get<{ count: number, tasks: TaskListItem[] }>(Url + 'tasks/')
+        .toPromise()
+    } else {
+      let queries: string[] = []
+      if(query.age) queries.push('age='+query.age)
+      if(query.level) queries.push('level='+query.level)
+      if(query.tags) queries.push('tags='+query.tags)
+      if(query.name) queries.push('name='+query.name)
+      let queryString: string = queries.join('&')
+      console.log(queryString);
+      
+      tasks = this.http.get<{ count: number, tasks: TaskListItem[] }>(Url + 'tasks/?'+ queryString)
       .toPromise()
+    }
+    return tasks
       .then(
         data => {
           return data.tasks.map(task => {
@@ -39,11 +56,11 @@ export class TasksProvider {
       )
   }
 
-  saveTasklist(taskListItems: TaskListItem[]){
+  saveTasklist(taskListItems: TaskListItem[]) {
     return this.storage.set('task-list', taskListItems)
   }
 
-  getTaskListFromStorage(){
+  getTaskListFromStorage() {
     return this.storage.get('task-list')
   }
 
@@ -96,19 +113,19 @@ export class TasksProvider {
       .then(
         tasks => {
           console.log(tasks);
-          
+
           let idx = -1;
           //is up to date
           let valid = true;
           if (tasks) {
             idx = tasks.findIndex(item => { return item._id === task._id })
-            if(idx>0){
-              
+            if (idx > 0) {
+
               valid = tasks[idx].updatedAt === task.updatedAt
               console.log(tasks[idx]);
               console.log(task.updatedAt)
               console.log(valid);
-              if(!valid){
+              if (!valid) {
                 this.removeTask(task._id)
               }
             }
@@ -121,14 +138,14 @@ export class TasksProvider {
 
   getTask(task: TaskListItem) {
     // console.log('getting task: ',task);
-    
+
     return this.isSaved(task).then(saved => {
       if (saved) {
         return this.storage.get('tasks').then(
           data => {
             console.log('this task is on storage');
             console.log(data);
-            
+
             let idx = data.findIndex(item => { return item._id === task._id })
             return data[idx]
           }
@@ -137,10 +154,10 @@ export class TasksProvider {
         console.log('fetching task');
         let Url = AppSettings.API_ENDPOINT
         // console.log(task);
-        
+
         return this.http.get<Task>(Url + 'tasks/' + task._id).toPromise()
-          .then(task => {             
-            return this.saveTask(task) 
+          .then(task => {
+            return this.saveTask(task)
           })
       }
     }
@@ -149,9 +166,9 @@ export class TasksProvider {
 
   saveTask(task: Task) {
     return this.storage.get('tasks').then(tasks => {
-      if(tasks){
+      if (tasks) {
         return this.storage.set('tasks', [...tasks, task]).then(_ => { return task })
-      }else{
+      } else {
         return this.storage.set('tasks', [task]).then(_ => { return task })
       }
     })
