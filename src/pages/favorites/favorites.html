@@ -5,8 +5,12 @@
 </ion-header> -->
 
 <ion-content padding>
-  <ion-row>
-    <ion-col center text-center *ngIf="!tasks">Τα αγαπημένα σας παιχνίδια θα εμφανίζονται εδώ.</ion-col>
+  <ion-row *ngIf="!tasks || tasks.length == 0">
+    <ion-col>
+      <ion-item center text-center>
+        Τα αγαπημένα σας παιχνίδια θα εμφανίζονται εδώ.
+      </ion-item>
+    </ion-col>
   </ion-row>
   <ion-row class="row">
     <ion-col col-12 col-md-6 col-lg-4 col-xl-3 *ngFor="let task of tasks">
