@@ -1,3 +1,4 @@
+import { SearchResultsPage } from './../pages/search-results/search-results';
 import { TaskListItemComponent } from './../components/task-list-item/task-list-item';
 import { TaskPage } from './../pages/task/task';
 import { Task } from './../models/Task';
@@ -25,6 +26,7 @@ import { OrderByPipe } from '../pipes/order-by/order-by';
 import { UserPreferencesProvider } from '../providers/user-preferences/user-preferences';
 import { FavoritesPage } from '../pages/favorites/favorites';
 import { TasksProvider } from '../providers/tasks/tasks';
+import { DragulaModule } from 'ng2-dragula';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -42,7 +44,8 @@ export function createTranslateLoader(http: HttpClient) {
     OrderByPipe,
     FavoritesPage,
     TaskPage,
-    TaskListItemComponent
+    TaskListItemComponent,
+    SearchResultsPage
   ],
   imports: [
     BrowserModule,
@@ -55,7 +58,8 @@ export function createTranslateLoader(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    DragulaModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -67,7 +71,8 @@ export function createTranslateLoader(http: HttpClient) {
     TabsPage,
     TaskDescriptionPage,
     FavoritesPage,
-    TaskPage
+    TaskPage,
+    SearchResultsPage
   ],
   providers: [
     StatusBar,
@@ -75,7 +80,7 @@ export function createTranslateLoader(http: HttpClient) {
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ScreenOrientation,
     UserPreferencesProvider,
-    TasksProvider,
+    TasksProvider
   ]
 })
 export class AppModule {}
