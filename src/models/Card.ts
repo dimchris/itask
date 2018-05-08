@@ -1,8 +1,8 @@
 export class Card{
     constructor(
-        private _id: string,
-        private name: string,
-        private description: string,
-        private image: {id: string, data: string},
+        public _id: string,
+        public name: string,
+        public description: string,
+        public image: {id: string, data: string},
     ){}
 }
