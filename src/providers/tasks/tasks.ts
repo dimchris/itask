@@ -112,20 +112,18 @@ export class TasksProvider {
     return this.storage.get('tasks')
       .then(
         tasks => {
-          console.log(tasks);
-
           let idx = -1;
           //is up to date
           let valid = true;
           if (tasks) {
+            
             idx = tasks.findIndex(item => { return item._id === task._id })
-            if (idx > 0) {
-
+            
+            if (idx > -1) {
               valid = tasks[idx].updatedAt === task.updatedAt
-              console.log(tasks[idx]);
-              console.log(task.updatedAt)
-              console.log(valid);
+
               if (!valid) {
+                
                 this.removeTask(task._id)
               }
             }
