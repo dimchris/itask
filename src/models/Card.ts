@@ -4,5 +4,6 @@ export class Card{
         public name: string,
         public description: string,
         public image: {id: string, data: string},
+        public position: boolean
     ){}
 }

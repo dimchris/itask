@@ -84,5 +84,6 @@
     <plugin name="cordova-plugin-screen-orientation" spec="^3.0.1" />
     <allow-navigation href="http://172.17.168.145:8100" />
     <plugin name="cordova-sqlite-storage" spec="^2.2.0" />
-    <engine name="android" spec="~7.0.0" />
+    <plugin name="cordova-plugin-tts" spec="^0.2.3" />
+    <engine name="android" spec="^7.0.0" />
 </widget>

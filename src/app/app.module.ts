@@ -1,3 +1,4 @@
+import { TextToSpeech } from '@ionic-native/text-to-speech';
 import { SearchResultsPage } from './../pages/search-results/search-results';
 import { TaskListItemComponent } from './../components/task-list-item/task-list-item';
 import { TaskPage } from './../pages/task/task';
@@ -80,7 +81,8 @@ export function createTranslateLoader(http: HttpClient) {
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ScreenOrientation,
     UserPreferencesProvider,
-    TasksProvider
+    TasksProvider,
+    TextToSpeech
   ]
 })
 export class AppModule {}
