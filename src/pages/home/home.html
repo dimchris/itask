@@ -4,7 +4,7 @@
   </ion-navbar>
 </ion-header> -->
 
-<ion-content padding>
+<ion-content padding data-tap-disabled="true">
   <ion-row class="row">
       <ion-col col-12 col-md-6 col-lg-4 col-xl-3 *ngFor="let task of tasks">
         <task-list-item [task]="task"></task-list-item>

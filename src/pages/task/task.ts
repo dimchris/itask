@@ -4,6 +4,8 @@ import { Task } from './../../models/Task';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { TextToSpeech } from '@ionic-native/text-to-speech'
+import { reorderArray } from 'ionic-angular';
+
 
 @IonicPage()
 @Component({
@@ -134,5 +136,40 @@ export class TaskPage {
 
   isGoalState(cards: Card[], goal: Card[]): boolean {
     return this.getMetric(cards, goal) == 1
+  }
+  reorderItems(indexes) {
+    this.cards = reorderArray(this.cards, indexes);
+    if (this.isGoalState(this.cards, this.task.cards)) {
+      let alert = this.alertCtrl.create({
+        title: 'Συγχαρητήρια Κέρδισες!',
+        message: 'Όλες οι σελίδες είναι στην σωστή σειρά!',
+        buttons: [
+          {
+            text: 'Επιστροφή στα Παιχνίδια',
+            handler: () => {
+              alert.dismiss().then(_ => {
+                this.navCtrl.popToRoot()
+              })
+              return false
+            }
+          },
+          {
+            role: 'cancel',
+            text: 'Δοκίμασε ξανά',
+            handler: () => {
+              for(let i = 0; i<this.cards.length;i++){
+                if(this.isPossitionRight(this.cards[i]._id)){
+                  this.cards[i].position = true
+                }else{
+                  this.cards[i].position = false
+                }
+              }
+              this.shuffle(this.cards)
+            }
+          }
+        ]
+      })
+      alert.present()
+    }
   }
 }

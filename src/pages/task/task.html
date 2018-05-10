@@ -7,11 +7,9 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-row class="row" [dragula]='"first-bag"' [dragulaModel]="cards">
-        <ion-col col-12 col-md-6 col-lg-4 col-xl-3 *ngFor="let card of cards; let i=index" [attr.idx]="card._id" [ngStyle]="{'background-color':card.position === true?'green': ''}">
-          <ion-card>
-            <img [src]="card.image.data" alt="card.image.description">
-          </ion-card>
-        </ion-col>
-    </ion-row>
+    <ion-list reorder="true" (ionItemReorder)="reorderItems($event)">
+        <ion-item *ngFor="let card of cards; let i=index">
+            <img [src]="card.image.data" [alt]="card.image.description">
+        </ion-item>
+    </ion-list>
 </ion-content>
