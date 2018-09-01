@@ -12,7 +12,9 @@ import { TextToSpeech } from '@ionic-native/text-to-speech'
 })
 export class TaskPage {
   task: Task;
-  cards: Card[]
+  cards: Card[];
+  gamestart: boolean = false;
+  help;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -37,16 +39,46 @@ export class TaskPage {
         }
       }
       console.log(this.getMetric(this.cards, this.task.cards));
+      if(this.getMetric(this.cards, this.task.cards)>0.5){
+        this.tts.speak({
+          text: 'Τα πας πολύ καλά! Συνέχισε έτσι!',
+          locale:'el-GR'
+        })
+      }
+      if(this.getMetric(this.cards, this.task.cards)>0.8){
+        this.tts.speak({
+          text: 'Είσαι πολύ κοντά στη νίκη!',
+          locale:'el-GR'
+
+        })
+      }
+      if(this.getMetric(this.cards, this.task.cards)<0.4){
+        this.tts.speak({
+          text: 'Προσπάθησε περισσότερο! Σίγουρα θα τα καταφέρεις!',
+          locale:'el-GR'
+
+        })
+      }
+      
       if (this.isGoalState(this.cards, this.task.cards)) {
+        let message = `Συγχαρητήρια Κέρδισες! Όλες οι κάρτες είναι στην σωστή σειρά! Μπορείς να παίξεις ξανά το ίδιο παιχνίδι ή να δοκιμάσεις ένα καινούργιο!`
+        this.tts.speak({text:message,locale:'el-GR'}).then(()=>{
+          this.gamestart = true;
+        })
+        .catch(error=>{
+          console.log(error);
+          
+        })
         let alert = alertCtrl.create({
-          title: 'Συγχαρητήρια Κέρδισες!',
-          message: 'Όλες οι σελίδες είναι στην σωστή σειρά!',
+          title: 'Συγχαρητήρια!',
+          message: 'Όλες οι κάρτες είναι στην σωστή σειρά!',
           buttons: [
             {
               text: 'Επιστροφή στα Παιχνίδια',
               handler: () => {
+                this.tts.speak('')
                 alert.dismiss().then(_ => {
-                  navCtrl.popToRoot()
+                  navCtrl.popAll()
                 })
                 return false
               }
@@ -55,12 +87,9 @@ export class TaskPage {
               role: 'cancel',
               text: 'Δοκίμασε ξανά',
               handler: () => {
+                this.tts.speak('');
                 for(let i = 0; i<this.cards.length;i++){
-                  if(this.isPossitionRight(this.cards[i]._id)){
-                    this.cards[i].position = true
-                  }else{
-                    this.cards[i].position = false
-                  }
+                  this.cards[i].position = false;
                 }
                 this.shuffle(this.cards)
               }
@@ -75,8 +104,32 @@ export class TaskPage {
   }
 
   ionViewDidLoad() {
-    this.tts.speak('Γεια σου. Τι κάνεις;').then(()=>{
-      console.log('success')
+    let message = `Καλωσήρθες στο παιχνίδι ${this.task.name}! 
+    Σκοπός του παιχνιδιού είναι να βάλεις τις κάρτες στη σωστή σειρά!
+    ${this.task.description}`;
+    this.help = this.alertCtrl.create({
+      title: 'Καλωσήρθες!',
+      message,
+      buttons: [
+        {
+          text: 'ΟΚ!',
+          handler: () =>{
+            this.tts.speak('');
+            message = `Μπροστάσ σου έχεις ${this.cards.length} κάρτες.`;
+            message += this.cards.map(card => card.name).join(',')
+            message += '. Βάλε τις κάρτες στη σωστή σειρά!'
+            message += 'Πάτησε πάνω στις κάρτες για να ακούσεις την περιγραφή τους.'
+            this.tts.speak({
+              text:message,
+              locale:'el-GR'
+            })
+          }
+        }
+      ]
+    });
+    this.help.present();
+    this.tts.speak({text:message, locale:'el-GR'}).then(()=>{
+      this.gamestart = true;
     })
     .catch(error=>{
       console.log(error);
@@ -135,4 +188,50 @@ export class TaskPage {
   isGoalState(cards: Card[], goal: Card[]): boolean {
     return this.getMetric(cards, goal) == 1
   }
+  onTap(card: Card){
+    let message = card.name;
+    console.log(card);
+    this.tts.speak('');
+    this.tts.speak({text:message,locale:'el-GR'}).then(()=>{
+    })
+    .catch(error=>{
+      console.log(error);
+      
+    })
+
+
+  }
+
+  onHelp(){
+    let message = `Καλωσήρθες στο παιχνίδι ${this.task.name}! 
+    Σκοπός του παιχνιδιού είναι να βάλεις τις κάρτες στη σωστή σειρά και έτσι να κερδίσεις!
+    ${this.task.description}`;
+    this.help = this.alertCtrl.create({
+      title: 'Καλωσήρθες!',
+      message,
+      buttons: [
+        {
+          text: 'ΟΚ!',
+          handler: () =>{
+            this.tts.speak('');
+            message = `Μπροστάσ σου έχεις ${this.cards.length} κάρτες.`;
+            message += this.cards.map(card => card.name).join(',')
+            message += '. Βάλε τις κάρτες στη σωστή σειρά!'
+            message += 'Πάρα πάνω στις κάρτες για να ακούσεις την περιγραφή τους.'
+            this.tts.speak({
+              text:message,
+              locale:'el-GR'
+            })
+          }
+        }
+      ]
+    });
+    this.help.present();
+    this.tts.speak({text:message, locale:'el-GR'}).then(()=>{
+      this.gamestart = true;
+    })
+    .catch(error=>{
+      console.log(error);
+      
+    })  }
 }
