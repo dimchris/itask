@@ -2,7 +2,7 @@ import { TaskPage } from './../task/task';
 import { TasksProvider } from './../../providers/tasks/tasks';
 import { TaskListItem } from './../../app/interfaces/TaskListItem';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, ToastController, LoadingController } from 'ionic-angular';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { UserPreferencesProvider } from '../../providers/user-preferences/user-preferences';
@@ -31,7 +31,8 @@ export class TaskDescriptionPage {
     public sanitizer: DomSanitizer,
     public toastCtrl: ToastController,
     public translateService: TranslateService,
-    public tasksCtrl: TasksProvider
+    public tasksCtrl: TasksProvider,
+    private loadCtrl: LoadingController
   ) {
     this.task = navParams.get('item');
     // console.log(this.task);
@@ -89,12 +90,15 @@ export class TaskDescriptionPage {
   }
 
   onStart(task: TaskListItem){
- 
+    let loading = this.loadCtrl.create({ content: 'Παρακαλώ περιμένετε' })
+    loading.present();
     this.tasksCtrl.getTask(task)
       .then( data => {
+        loading.dismiss();
         console.log(data);
         this.navCtrl.push(TaskPage, {task: data})
       }).catch( error => {
+        loading.dismiss();
         this.toastCtrl.create({message:'Δεν βρέθηκε σύνδεση στο διαδύκτιο.'})
       })
   }
