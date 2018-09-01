@@ -2,15 +2,22 @@
 
   <ion-navbar>
     <ion-title>{{task.name}}</ion-title>
+    <ion-buttons end> <button ion-button icon-only (click)="onHelp()"> <ion-icon name="help"></ion-icon> </button> </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 <ion-content padding>
     <ion-row class="row" [dragula]='"first-bag"' [dragulaModel]="cards">
-        <ion-col col-12 col-md-6 col-lg-4 col-xl-3 *ngFor="let card of cards; let i=index" [attr.idx]="card._id" [ngStyle]="{'background-color':card.position === true?'green': ''}">
+        <ion-col col-2 *ngFor="let card of cards; let i=index" [attr.idx]="card._id" [ngStyle]="{'background-color':card.position === true?'green': ''}">
           <ion-card>
-            <img [src]="card.image.data" alt="card.image.description">
+            {{ i + 1  }}
+            <img [src]="card.image.data" alt="card.image.description" (tap)="onTap(card)">
+            <ion-card-content>
+              <p>
+                 {{ card.name }}
+                </p>
+            </ion-card-content>
           </ion-card>
         </ion-col>
     </ion-row>

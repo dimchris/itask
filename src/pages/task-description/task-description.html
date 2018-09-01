@@ -10,15 +10,16 @@
     <ion-buttons start>
       <button ion-button (click)="dismiss()">{{"BACK" | translate }}</button>
     </ion-buttons>
-    <ion-title>{{ "DESCRIPTION" | translate }}</ion-title>
+    <ion-title>{{ task.name }}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content>
-  <ion-card class="full-height">
+  <div text-center>
     <img [src]="this.sanitizer.bypassSecurityTrustUrl(task.image.data)" [alt]="task.image.description"/>
+  </div>
     <ion-card-content>
       <ion-card-title  text-center>
         {{task.name}}
@@ -36,5 +37,4 @@
       </ion-label>
       <button ion-button block (tap)="onStart(task)">{{ "START" | translate }}</button>
     </ion-card-content>
-  </ion-card>
 </ion-content>
