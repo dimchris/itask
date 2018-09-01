@@ -15,6 +15,7 @@ export class TaskPage {
   cards: Card[];
   gamestart: boolean = false;
   help;
+  dropSubscription;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -24,11 +25,11 @@ export class TaskPage {
   ) {
     this.task = navParams.get('task')
     this.cards = this.shuffle(this.task.cards.slice())
-    dragulaCtrl.drag.subscribe(val => {
-    })
-    dragulaCtrl.shadow.subscribe(val => {
-    })
-    dragulaCtrl.drop.subscribe(val => {
+    // dragulaCtrl.drag.subscribe(val => {
+    // })
+    // dragulaCtrl.shadow.subscribe(val => {
+    // })
+    this.dropSubscription = dragulaCtrl.drop.subscribe(val => {
       // let id = val[1].attributes.idx.value;
       // let possition = this.getPosition(id, this.cards)
       for(let i = 0; i<this.cards.length;i++){
@@ -78,7 +79,7 @@ export class TaskPage {
               handler: () => {
                 this.tts.speak('')
                 alert.dismiss().then(_ => {
-                  navCtrl.popAll()
+                  navCtrl.popAll();
                 })
                 return false
               }
@@ -136,6 +137,13 @@ export class TaskPage {
       
     })
     console.log('ionViewDidLoad TaskPage');
+  }
+
+  ionViewWillUnload(){
+    if(this.dragulaCtrl){
+      console.log('unsub');     
+      this.dropSubscription.unsubscribe();
+    }
   }
 
   shuffle(array) {
@@ -214,7 +222,7 @@ export class TaskPage {
           text: 'ΟΚ!',
           handler: () =>{
             this.tts.speak('');
-            message = `Μπροστάσ σου έχεις ${this.cards.length} κάρτες.`;
+            message = `Μπροστά σου έχεις ${this.cards.length} κάρτες.`;
             message += this.cards.map(card => card.name).join(',')
             message += '. Βάλε τις κάρτες στη σωστή σειρά!'
             message += 'Πάρα πάνω στις κάρτες για να ακούσεις την περιγραφή τους.'
