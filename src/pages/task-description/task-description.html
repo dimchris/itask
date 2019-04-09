@@ -1,0 +1,40 @@
+<!--
+  Generated template for the TaskDescriptionPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">{{"BACK" | translate }}</button>
+    </ion-buttons>
+    <ion-title>{{ task.name }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div text-center>
+    <img [src]="this.sanitizer.bypassSecurityTrustUrl(task.image.data)" [alt]="task.image.description"/>
+  </div>
+    <ion-card-content>
+      <ion-card-title  text-center>
+        {{task.name}}
+        <ion-icon  *ngIf="fav" name="heart" (click)="removeFromFavorite(task)"></ion-icon>
+        <ion-icon *ngIf="!fav" name="heart-outline" (click)="addToFavorite(task)"></ion-icon>
+      </ion-card-title>
+      <p>
+        {{task.description}}
+      </p>
+      <ion-label>
+        {{ "LEVEL" | translate }} : {{ task.level }}/5
+      </ion-label>
+      <ion-label>
+        {{ "AGE" | translate}} : {{ task.age }}
+      </ion-label>
+      <button ion-button block (tap)="onStart(task)">{{ "START" | translate }}</button>
+    </ion-card-content>
+</ion-content>

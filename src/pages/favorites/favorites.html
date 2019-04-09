@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ "HOME_TAB_TITLE" | translate }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-row *ngIf="!tasks || tasks.length == 0">
+    <ion-col>
+      <ion-item center text-center>
+        Τα αγαπημένα σας παιχνίδια θα εμφανίζονται εδώ.
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row class="row">
+    <ion-col col-2 *ngFor="let task of tasks">
+      <task-list-item [task]="task" (onModalDismissed)="updateFavorites($event)"></task-list-item>
+    </ion-col>
+  </ion-row>
+</ion-content>
